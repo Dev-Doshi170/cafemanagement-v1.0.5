@@ -68,6 +68,10 @@ export default function Sidebar1({ ...props }) {
             <NavLink to='menulist'>
             <MenuItem >Menu List</MenuItem>
             </NavLink>
+            <NavLink to='categories'>
+            <MenuItem >categories</MenuItem>
+            </NavLink>
+            
 
             </SubMenu>
             <SubMenu
