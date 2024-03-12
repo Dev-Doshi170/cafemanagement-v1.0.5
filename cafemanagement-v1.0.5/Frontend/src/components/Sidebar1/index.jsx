@@ -34,7 +34,7 @@ export default function Sidebar1({ ...props }) {
             </MenuItem>
             </NavLink>
             <NavLink to='/addoder'>
-            <MenuItem icon={<Img src="images/img_circlesfour.svg" alt="image_one" className="h-[20px] w-[20px]" />}>
+            <MenuItem icon={<Img src="public\images\clipboard.png" alt="image_one" className="h-[20px] w-[20px]" />}>
               Add Oder
             </MenuItem>
             </NavLink>

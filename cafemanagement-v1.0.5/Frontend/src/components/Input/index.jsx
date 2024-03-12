@@ -36,7 +36,9 @@ const Input = React.forwardRef(
     ref,
   ) => {
     const handleChange = (e) => {
-      if (onChange) onChange(e?.target?.value);
+      if (onChange) {
+        onChange(e);
+      }
     };
 
     return (
@@ -44,10 +46,10 @@ const Input = React.forwardRef(
         <div
           className={`${className} flex items-center justify-center text-blue_gray-400 border border-solid ${shapes[shape] || ""} ${variants[variant]?.[color] || variants[variant] || ""} ${sizes[size] || ""}`}
         >
-          {!!label && label}
-          {!!prefix && prefix}
+          {!!label && <label>{label}</label>}
+          {!!prefix && <span>{prefix}</span>}
           <input ref={ref} type={type} name={name} onChange={handleChange} placeholder={placeholder} {...restProps} />
-          {!!suffix && suffix}
+          {!!suffix && <span>{suffix}</span>}
         </div>
       </>
     );
