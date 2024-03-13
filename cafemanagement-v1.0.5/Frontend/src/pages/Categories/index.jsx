@@ -66,7 +66,7 @@ export default function MenuListPage() {
 
   const handlePopupSubmit = () => {
     if (mode === 'add') {
-      addCatgory(currentPage,rowsPerPage);
+      addCatgory(editProductName,currentPage,rowsPerPage);
     } else if (mode === 'edit') {
       editCategory(editProductName,currentPage,rowsPerPage);
     }

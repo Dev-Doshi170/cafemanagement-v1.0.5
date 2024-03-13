@@ -1,4 +1,4 @@
-// CountryContext.js
+
 import React, { createContext, useContext, useState } from 'react';
 import { useLocation  } from 'react-router-dom';
 import { ToastContainer,toast } from 'react-toastify';
@@ -21,7 +21,7 @@ export const CategoryProvider = ({ children }) => {
   
    
 
-    const addCatgory = async (currentPage,rowsPerPage) => {
+    const addCatgory = async (name,currentPage,rowsPerPage) => {
       try {
         const response = await fetch(`http://localhost:8000/category/addcategory?currentPage=${currentPage}&rowsPerPage=${rowsPerPage}`, {
           method: 'POST',

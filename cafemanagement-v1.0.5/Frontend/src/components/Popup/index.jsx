@@ -14,7 +14,7 @@ const Popup = ({ title, onClose, children }) => {
             <X size={30} />
           </button>
         </div>
-        <div className="max-h-48 overflow-y-auto">{children}</div>
+        <div className="max-h-60 overflow-y-auto ">{children}</div>
       </div>
     </div>
   );
