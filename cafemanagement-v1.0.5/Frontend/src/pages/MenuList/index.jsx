@@ -21,23 +21,34 @@ const dropDownOptions = [
 
 export default function MenuListPage() {
 
-  const menu = useSelector((state) => state.menu.menu);
+  const {menu,categorylist} = useSelector((state) => state.menu);
 
  
-  const { getMenu } = useMenuContext();
+  const { getMenu,getCatgory,updateMenuDetails } = useMenuContext();
 
   useEffect(() => {
     getMenu();
+    getCatgory();
+    
   }, [])
+
+  console.log(menu.name)
+ 
+
 
   const [editingProduct, setEditingProduct] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
 
-  const handleEditClick = (product) => {
+  const handleEditClick = async (product) => {
     setEditingProduct(product);
     setIsPopupOpen(true);
   };
+  
+  useEffect(() => {
+    console.log(editingProduct);
+  }, [editingProduct]);
+
 
   const handlePopupClose = () => {
     setEditingProduct(null);
@@ -45,10 +56,13 @@ export default function MenuListPage() {
   };
 
   const handleFormSubmit = (updatedProduct) => {
+    updateMenuDetails(editingProduct);
+   
     // Handle form submission, e.g., dispatch an action to update the product
-    console.log("Updated Product:", updatedProduct);
+    //console.log("Updated Product:", updatedProduct);
 
     // Close the popup
+
     handlePopupClose();
   };
 
@@ -69,6 +83,12 @@ export default function MenuListPage() {
     // Close the confirmation popup
     setIsDeleteConfirmationOpen(false);
   };
+
+  const updateData = () =>{
+    
+    updateMenuDetails(editingProduct);
+    console.log(editingProduct)
+  }
 
   return (
     <>
@@ -185,12 +205,30 @@ export default function MenuListPage() {
       {isPopupOpen && (
         <Popup title="Edit Product" onClose={handlePopupClose}>
           <form className="flex  flex-col gap-4" onSubmit={(e) => { e.preventDefault(); handleFormSubmit(editingProduct); }}>
-            <Input type="text" value={editingProduct.productname} />
-            <Input type="text" value={editingProduct.quantity} />
-            <Input type="text" value={editingProduct.name} />
-            <Input type="text" value={editingProduct.price} />
+          <Input type="text" value={editingProduct.productname} onChange={(e) => setEditingProduct({ ...editingProduct, productname: e.target.value })} />
+  <Input type="text" value={editingProduct.quantity} onChange={(e) => setEditingProduct({ ...editingProduct, quantity: e.target.value })} />
+            
+            <div className="relative w-60 bg-gray-50_01 rounded-[17px] border border-solid text-blue_gray-400">
+            <select
+  value={editingProduct.name} // Use editingProduct.name as the value
+  onChange={(e) => {
+    const selectedName = e.target.value;
+    const selectedCategory = categorylist.find(category => category.name === selectedName);
+    setEditingProduct({ ...editingProduct, name: selectedName, categoryid: selectedCategory?.id });
+  }}
+  className="input-box w-56 ml-4 p-2"
+>
+<option  value={editingProduct.name}>{editingProduct.name}</option>
+  {categorylist.map((category) => (
+    <option key={category.id} value={category.name}>
+      {category.name}
+    </option>
+  ))}
+</select>
+</div>
+<Input type="text" value={editingProduct.price} onChange={(e) => setEditingProduct({ ...editingProduct, price: e.target.value })} />
 
-            <Button type="submit">Update</Button>
+            <Button type="submit" >Update</Button>
           </form>
         </Popup>
       )}

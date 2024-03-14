@@ -4,6 +4,7 @@ const menuSlice = createSlice({
     name: 'menu',
     initialState: {
       menu: [],
+      categorylist:[],
     //   selectedCategory: null,
     //   pagination: {
     //     totalPages: 0,
@@ -32,9 +33,25 @@ const menuSlice = createSlice({
     //   setSearchCategory: (state, action) => {
     //     state.categories = action.payload;
     //   },
+
+    setCategorylist: (state, action) => {
+        console.log(action.payload)
+      state.categorylist = action.payload
+     
+   },
+   menuupdate: (state, action) => {
+    console.log(action.payload)
+     const data = action.payload
+     const  id = data.id;
+   
+    const index = state.menu.findIndex(item => item.id === id);
+    if (index !== -1) {
+      state.menu[index] = data;
+    }
+  },
     },
   });
   
-  export const { setMenu } = menuSlice.actions;
+  export const { setMenu,setCategorylist,menuupdate } = menuSlice.actions;
   
   export default menuSlice.reducer;
