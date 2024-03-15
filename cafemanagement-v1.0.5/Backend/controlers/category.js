@@ -70,6 +70,51 @@ router.post('/addcategory', async (req, res) => {
   }
 });
 
+// router.delete('/deletecategory/:categoryId', async (req, res) => {
+//   const { categoryId } = req.params;
+//   const rowsPerPage = req.query.rowsPerPage || 5; // Default to 5 rows per page
+//   const currentPage = req.query.currentPage || 1;
+
+//   try {
+//     // Check if the category with the given ID exists
+//     const checkCategory = await client.query('SELECT * FROM category WHERE id = $1 AND isdeleted = false', [categoryId]);
+
+//     if (checkCategory.rows.length === 0) {
+//       return res.status(404).json({ message: 'Category not found' });
+//     }
+
+//     // Update isdeleted to true for the specified category ID
+//     const result = await client.query('UPDATE category SET isdeleted = true WHERE id = $1', [categoryId]);
+
+//     if (result.rowCount === 1) {
+//       // Fetch and send the updated categories after deletion with pagination
+//       const totalCategoriesCount = await client.query('SELECT COUNT(*) FROM category WHERE isdeleted = false');
+//       const totalPages = Math.ceil(totalCategoriesCount.rows[0].count / rowsPerPage);
+
+//       const updatedCategories = await client.query({
+//         text: 'SELECT * FROM category WHERE isdeleted = false OFFSET $1 LIMIT $2',
+//         values: [(currentPage - 1) * rowsPerPage, rowsPerPage],
+//       });
+
+//       res.status(200).json({
+//         message: 'Category deleted successfully',
+//         data: updatedCategories.rows,
+//         pagination: {
+//           totalPages,
+//           currentPage,
+//           count: totalCategoriesCount.rows[0].count,
+//           rowsPerPage,
+//         },
+//       });
+//     } else {
+//       res.status(500).json({ message: 'Failed to delete category' });
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// });
+  
 router.delete('/deletecategory/:categoryId', async (req, res) => {
   const { categoryId } = req.params;
   const rowsPerPage = req.query.rowsPerPage || 5; // Default to 5 rows per page
@@ -90,11 +135,14 @@ router.delete('/deletecategory/:categoryId', async (req, res) => {
       // Fetch and send the updated categories after deletion with pagination
       const totalCategoriesCount = await client.query('SELECT COUNT(*) FROM category WHERE isdeleted = false');
       const totalPages = Math.ceil(totalCategoriesCount.rows[0].count / rowsPerPage);
+      const nextPageOffset = (currentPage - 1) * rowsPerPage;
 
       const updatedCategories = await client.query({
-        text: 'SELECT * FROM category WHERE isdeleted = false OFFSET $1 LIMIT $2',
-        values: [(currentPage - 1) * rowsPerPage, rowsPerPage],
+        text: 'SELECT * FROM category WHERE isdeleted = false ORDER BY id OFFSET $1 LIMIT $2',
+        values: [nextPageOffset, rowsPerPage],
       });
+
+      console.log(updatedCategories)
 
       res.status(200).json({
         message: 'Category deleted successfully',
@@ -114,7 +162,6 @@ router.delete('/deletecategory/:categoryId', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
-  
   
 
   router.put('/editcategory', async (req, res) => {
