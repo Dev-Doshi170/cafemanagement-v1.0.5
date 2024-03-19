@@ -203,6 +203,20 @@ router.get('/getmenu', async (req, res) => {
     }
   });
 
+  router.get('/searchmenubycategory', async (req, res) => {
+    const searchTerm = req.query.name;
+    console.log(searchTerm)
+  
+    try {
+      const searchResult = await client.query('SELECT * FROM menu WHERE categoryid = $1 AND isdeleted = false', [searchTerm]);
+  
+      res.status(200).json({ data: searchResult.rows });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 
 
 

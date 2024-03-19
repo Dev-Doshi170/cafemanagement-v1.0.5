@@ -154,12 +154,28 @@ export const MenuProvider = ({ children }) => {
     }
   };
 
+  const searchmenubycategory = async (searchTerm) => {
+    try {
+      const response = await fetch(`http://localhost:8000/menu/searchmenubycategory?name=${searchTerm}`);
+  
+      if (response.ok) {
+        const result = await response.json();
+        const { data } = result;
+        dispatch(setSearchMenu(data));
+      } else {
+        console.error('Failed to search categories');
+      }
+    } catch (error) {
+      console.error('Error searching categories:', error);
+    }
+  };
+
   // useEffect(() => {
   //   getMenu();
   // }, []);
 
   return (
-    <MenuContext.Provider value={{ getMenu ,getCatgory,updateMenuDetails,deleteMenuItem,addMenuItem,searchMenu}}>
+    <MenuContext.Provider value={{ getMenu ,getCatgory,updateMenuDetails,deleteMenuItem,addMenuItem,searchMenu,searchmenubycategory}}>
       {children}
       <ToastContainer />
     </MenuContext.Provider>
