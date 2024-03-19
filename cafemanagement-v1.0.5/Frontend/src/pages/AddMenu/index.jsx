@@ -293,11 +293,21 @@ export default function AddMenuPage() {
     price: "",
     quantity: "",
     categoryid: null,
+    image:null,
+    url:null
   });
 
   useEffect(() => {
     getCatgory();
   }, []);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0]; // Get the selected file
+    setFormData({
+      ...formData,
+      image: file // Update the image in the form data
+    });
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -307,11 +317,39 @@ export default function AddMenuPage() {
   const handleCategoryChange = (selectedOption) => {
     setFormData({ ...formData, categoryid: selectedOption.categoryid });
   };
+  
+  const handleImageUpload = async(pics) => {
+    if (pics.type === "image/jpeg" || pics.type === "image/png") {
+      const data = new FormData();
+      data.append("file", pics); // Use the same key "file"
+      data.append("upload_preset", "ml_default");
+      data.append("cloud_name", "dtcu9cwxo");
+      fetch("https://api.cloudinary.com/v1_1/dtcu9cwxo/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          // Update only the image URL in the formData
+          setFormData(prevState => ({
+            ...prevState,
+            url: data.url.toString() // Update the image URL
+          }));
+          const link =  data.url.toString();
+          console.log(data.url.toString());
+          addMenuItem(formData,link)
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
 
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     // Handle form submission here
-    addMenuItem(formData)
-    console.log(formData)
+    handleImageUpload(formData.image)
+    //await addMenuItem(formData)
+    //console.log(formData)
   };
 
   return (
@@ -386,24 +424,32 @@ export default function AddMenuPage() {
                       </div>
                     </div>
                     <div className="flex flex-row justify-start items-start w-full gap-[30px]">
-                      <div className="flex flex-col items-start justify-start w-[49%] gap-1.5">
-                        <Text size="lg" as="p">
-                          Upload
-                        </Text>
-                        <div className="flex flex-row justify-start w-full">
-                          <div className="flex flex-row justify-center w-full p-[37px] border-gray-200 border border-dashed bg-gray-50_01 rounded-[5px]">
-                            <div className="flex flex-col items-center justify-start w-[46%] gap-2.5 mx-[120px]">
-                              <Img src="images/img_frame_15.svg" alt="image_five" className="h-[32px] w-[32px]" />
-                              <Text as="p" className="!text-blue_gray-400 !font-normal">
-                                <span className="text-gray-700_01 font-medium">Drop your images here</span>
-                                <span className="text-gray-700_01 font-medium">,</span>
-                                <span className="text-blue_gray-400"></span>
-                                <span className="text-blue-A200">or browse</span>
-                              </Text>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                    <div className="flex flex-col items-start justify-start w-[49%] gap-1.5">
+  <Text size="lg" as="p">
+    Upload
+  </Text>
+  <div className="flex flex-row justify-start w-full">
+    <label htmlFor="image-upload" className="flex flex-row justify-center w-full p-[37px] border-gray-200 border border-dashed bg-gray-50_01 rounded-[5px] cursor-pointer">
+      <input 
+        id="image-upload" 
+        type="file" 
+        accept="image/*" 
+        name="image"
+        onChange={handleImageChange}
+        style={{ display: 'none' }}
+      />
+      <div className="flex flex-col items-center justify-start w-[46%] gap-2.5 mx-[120px]">
+        <Img src="images/img_frame_15.svg" alt="image_five" className="h-[32px] w-[32px]" />
+        <Text as="p" className="!text-blue_gray-400 !font-normal">
+          <span className="text-gray-700_01 font-medium">Drop your images here</span>
+          <span className="text-gray-700_01 font-medium">,</span>
+          <span className="text-blue_gray-400"></span>
+          <span className="text-blue-A200">or browse</span>
+        </Text>
+      </div>
+    </label>
+  </div>
+</div>
                       <div className="flex flex-col items-start justify-start w-[49%] gap-1.5">
                         <Text size="lg" as="p" className="!text-blue_gray-400">
                           Categories

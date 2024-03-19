@@ -4,7 +4,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch } from 'react-redux';
 import {setMenu,setCategorylist,menuupdate,setSearchMenu} from '../slice/menuSlice'
 
+
 const MenuContext = createContext();
+
+
 
 export const MenuProvider = ({ children }) => {
   const dispatch = useDispatch();
@@ -106,7 +109,8 @@ export const MenuProvider = ({ children }) => {
     }
   }
 
-  async function addMenuItem(formdata) {
+  async function addMenuItem(formdata,link) {
+   console.log(link)
 
     try {
       const response = await fetch('http://localhost:8000/menu/addmenu', {
@@ -115,7 +119,7 @@ export const MenuProvider = ({ children }) => {
           'Content-Type': 'application/json',
           // You can add additional headers if needed
         },
-        body: JSON.stringify(formdata) // Convert data to JSON format
+        body: JSON.stringify({formdata,link}) // Convert data to JSON format
       });
   
       if (response.ok) {
@@ -131,6 +135,8 @@ export const MenuProvider = ({ children }) => {
       throw error; // Throw the error for the caller to handle
     }
   }
+
+  
 
   const searchMenu = async (searchTerm) => {
     try {

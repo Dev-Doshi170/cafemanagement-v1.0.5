@@ -1,6 +1,9 @@
 const express = require("express");
 const client = require('../db');
 const router = express.Router();
+const multer = require('multer');
+
+const upload = multer({ dest: 'uploads/' });
 
 
 
@@ -164,11 +167,13 @@ router.get('/getmenu', async (req, res) => {
 
   router.post('/addmenu', async (req, res) => {
     try {
-      const { categoryid, productname, quantity, price } = req.body;
+      const { formdata,link } = req.body;
+      const{categoryid, productname, quantity, price } = formdata
+      console.log(link)
   
       // Insert the new menu item into the database
-      const query = 'INSERT INTO menu (categoryid, productname, quantity, price) VALUES ($1, $2, $3, $4) RETURNING *';
-      const values = [categoryid, productname, quantity, price];
+      const query = 'INSERT INTO menu (categoryid, productname, quantity, price,image) VALUES ($1, $2, $3, $4,$5) RETURNING *';
+      const values = [categoryid, productname, quantity, price,link];
       const result = await client .query(query, values);
   
       // If the insertion was successful, return the newly added menu item
@@ -182,6 +187,8 @@ router.get('/getmenu', async (req, res) => {
       res.status(500).json({ message: 'Internal server error' });
     }
   });
+
+  
 
   router.get('/searchmenu', async (req, res) => {
     const searchTerm = req.query.name;

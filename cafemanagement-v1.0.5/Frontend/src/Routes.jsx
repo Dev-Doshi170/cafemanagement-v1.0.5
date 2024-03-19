@@ -13,7 +13,7 @@ import AddMenu from "./pages/AddMenu/index";
 import MenuList from "./pages/MenuList/index";
 import Categories from "./pages/Categories/index";
 import Sidebar1 from "components/Sidebar1";
-import Addoder from "./pages/Orderonline"
+import Addoder from "./pages/Addoder"
 const ProjectRoutes = () => {
   return (
     <div className="flex">
