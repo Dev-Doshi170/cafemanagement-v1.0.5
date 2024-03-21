@@ -47,7 +47,7 @@ export const CategoryProvider = ({ children }) => {
     };
 
     const getCatgory = async (currentPage,rowsPerPage) => {
-
+      console.log(currentPage,rowsPerPage)
       try {
         
         const response = await fetch(`http://localhost:8000/category?currentPage=${currentPage}&rowsPerPage=${rowsPerPage}`);

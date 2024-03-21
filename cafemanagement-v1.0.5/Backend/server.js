@@ -13,8 +13,14 @@ app.use(bodyParser.json());
 const category = require('./controlers/category');
 app.use('/category', category); // This maps to /category in your URL
 
+const customer = require('./controlers/customer');
+app.use('/customer', customer);
+
 const menu = require('./controlers/menu');
 app.use('/menu', menu);
+
+const order = require('./controlers/order');
+app.use('/order', order);
 
 app.listen(8000, () => {
     console.log("Server started on port 8000");

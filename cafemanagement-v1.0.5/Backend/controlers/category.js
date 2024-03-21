@@ -5,6 +5,7 @@ const router = express.Router();
 router.get('/', async (req, res) => {
     const rowsPerPage = req.query.rowsPerPage || 5; // Default to 5 rows per page
     const currentPage = req.query.currentPage || 1;
+    
   
     try {
       const result = await client.query({

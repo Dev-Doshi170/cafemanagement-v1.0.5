@@ -14,6 +14,8 @@ import MenuList from "./pages/MenuList/index";
 import Categories from "./pages/Categories/index";
 import Sidebar1 from "components/Sidebar1";
 import Addoder from "./pages/Addoder"
+import Checkout from "./pages/Checkout"
+
 const ProjectRoutes = () => {
   return (
     <div className="flex">
@@ -31,7 +33,8 @@ const ProjectRoutes = () => {
         <Route path="addmenu" element={<AddMenu />} />
         <Route path="menulist" element={<MenuList />} />
         <Route path="categories" element={<Categories />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="*" element={<NotFound />} /> 
+        <Route path="/checkout" element={<Checkout/>} />
       </Routes>
       
     </div>

@@ -6,6 +6,7 @@ import { useMenuContext } from "../../context/menu";
 import { useSelector, useDispatch } from "react-redux";
 import { setOrder, deleteItem } from "../../slice/oderSlice";
 import { Trash2 } from "lucide-react";
+import { useNavigate } from 'react-router-dom';
 
 export default function OrderonlinePage() {
   const {
@@ -16,11 +17,15 @@ export default function OrderonlinePage() {
     searchMenu,
     searchmenubycategory,
   } = useMenuContext();
+
+
   const { menu, pagination, categorylist } = useSelector((state) => state.menu);
   const { totalPages, currentPage } = pagination;
   const rowsPerPage = 6;
   const orderList = useSelector((state) => state.order.orderList);
+  const subtotal = useSelector((state) => state.order.subtotal);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [quantities, setQuantities] = useState("");
   const [FilteredCategory, setFilteredCategory] = useState("All Category");
@@ -113,10 +118,10 @@ export default function OrderonlinePage() {
     getMenu(Number(pageNumber), rowsPerPage); // Reset to the first page when changing items per page
   };
 
-  const subtotal = orderList.reduce(
-    (total, item) => total + item.price * item.orderedQuantity,
-    0
-  );
+  // const subtotal = orderList.reduce(
+  //   (total, item) => total + item.price * item.orderedQuantity,
+  //   0
+  // );
   const taxFee = subtotal * 0.18;
   const total = subtotal + taxFee;
 
@@ -144,7 +149,7 @@ export default function OrderonlinePage() {
     }
   };
 
-  console.log(orderList);
+  
 
   return (
     <>
@@ -163,13 +168,13 @@ export default function OrderonlinePage() {
                 Menu
               </Heading>
               <div className="flex flex-col justify-start  items-start w-[94%] ">
-                  <Input
-                    type="text"
-                    placeholder="Search..."
-                    className="w-[20%] bg-slate-300"
-                    onChange={handleSearchChange}
-                  />
-                  </div>
+                <Input
+                  type="text"
+                  placeholder="Search..."
+                  className="w-[20%] bg-slate-300"
+                  onChange={handleSearchChange}
+                />
+              </div>
 
               <div className="flex flex-col items-start justify-start w-full gap-[59px]">
                 <div className="flex flex-row md:flex-col justify-start w-full gap-7 md:gap-5">
@@ -208,22 +213,17 @@ export default function OrderonlinePage() {
                       ))}
                     </div>
                   </div>
-
                 </div>
-                
+
                 <div className="flex flex-row md:flex-col justify-start items-center w-full gap-[46px] md:gap-5">
                   <div className="flex flex-col items-start justify-start w-[66%] md:w-full gap-12">
                     <div className="flex flex-col items-start justify-start gap-2.5">
                       <Heading size="lg" as="h2">
                         {FilteredCategory}
                       </Heading>
-                      
 
                       <div className="h-[2px] w-full bg-red-400" />
-
-                      
                     </div>
-                    
 
                     <div className="flex flex-col items-center justify-start w-full">
                       <div className="flex flex-col items-center justify-start w-full">
@@ -318,7 +318,7 @@ export default function OrderonlinePage() {
                           </svg>
                           Previous
                         </button>
-                        
+
                         <div className="flex items-center gap-2">
                           {Array.from(
                             { length: totalPages },
@@ -388,7 +388,6 @@ export default function OrderonlinePage() {
                                 onClick={() => deltefromoderlist(item.id)}
                                 className="cursor-pointer"
                               />
-                              
                             </div>
                             <div className="flex flex-row justify-between items-center w-full">
                               <div className="flex flex-row justify-center w-[42%]">
@@ -440,6 +439,13 @@ export default function OrderonlinePage() {
                         size="2xl"
                         shape="round"
                         className="mb-1 sm:px-5 font-semibold min-w-[283px] !rounded-[15px] sm:min-w-full"
+                        onClick={() => {
+                          if (orderList.length > 0) {
+                            navigate("/checkout"); // Adjust the path as needed
+                          } else {
+                            alert("Your cart is empty!"); // Or handle this case as you see fit
+                          }
+                        }}
                       >
                         Checkout
                       </Button>
