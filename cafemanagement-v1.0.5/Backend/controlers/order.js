@@ -85,15 +85,17 @@ router.get('/orderlist', async (req, res) => {
         // Execute SQL query to join orders, customers, and menu tables
         const result = await client.query(`
         SELECT 
-        o.*, 
-        CONCAT(c.firstname, ' ', c.lastname) AS customername, 
-        m.productname
-    FROM 
-        orders o
-    JOIN 
-        customer c ON o.customerid = c.customerid
-    JOIN 
-        menu m ON o.productid = m.id
+                o.*, 
+                CONCAT(c.firstname, ' ', c.lastname) AS customername, 
+                m.productname
+            FROM 
+                orders o
+            JOIN 
+                customer c ON o.customerid = c.customerid
+            JOIN 
+                menu m ON o.productid = m.id
+            ORDER BY 
+                o.orderid ASC
         `);
 
         // Send the result as JSON response
