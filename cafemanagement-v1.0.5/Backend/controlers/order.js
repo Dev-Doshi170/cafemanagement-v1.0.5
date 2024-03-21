@@ -63,5 +63,70 @@ router.post('/addOrder', async (req, res) => {
     }
 });
 
+// router.get('/orderlist', async (req, res) => {
+//     try {
+//         // Execute SQL query to join orders and customers table
+//         const result = await client.query(`
+//             SELECT o.orderid, o."Date", CONCAT(c.firstname, ' ', c.lastname) AS customername, o.amount
+//             FROM orders o
+//             JOIN customer c ON o.customerid = c.customerid
+//         `);
+
+//         // Send the result as JSON response
+//         res.json(result.rows);
+//     } catch (error) {
+//         console.error('Error fetching orders:', error);
+//         res.status(500).json({ message: 'Internal server error' });
+//     }
+// });
+
+router.get('/orderlist', async (req, res) => {
+    try {
+        // Execute SQL query to join orders, customers, and menu tables
+        const result = await client.query(`
+        SELECT 
+        o.*, 
+        CONCAT(c.firstname, ' ', c.lastname) AS customername, 
+        m.productname
+    FROM 
+        orders o
+    JOIN 
+        customer c ON o.customerid = c.customerid
+    JOIN 
+        menu m ON o.productid = m.id
+        `);
+
+        // Send the result as JSON response
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error fetching orders:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+router.put('/updateOrderStatus/:orderId', async (req, res) => {
+    const { orderId } = req.params;
+
+    try {
+        // Execute SQL query to update the status of the order with the provided order ID
+        const result = await client.query(`
+            UPDATE orders 
+            SET status = true 
+            WHERE orderid = $1
+            RETURNING *;
+        `, [orderId]);
+
+        // Check if the order with the provided ID exists
+        if (result.rowCount === 0) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+
+        // Send the updated order as JSON response
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.error('Error updating order status:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
 
 module.exports = router;

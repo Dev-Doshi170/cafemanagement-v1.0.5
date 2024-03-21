@@ -17,7 +17,7 @@ export default function CheckoutPage() {
   const {addCustomer} = useCustomerContext();
   const {addOrder} = useOrderContext();
 
-  const orderList = useSelector((state) => state.order.orderList);
+  const cartlist = useSelector((state) => state.order.cartlist);
   const subtotal = useSelector((state) => state.order.subtotal);
 
   const [customerData, setCustomerData] = useState({
@@ -50,9 +50,9 @@ export default function CheckoutPage() {
 
   const placeOrder = async() => {
     // console.log('Customer Data:', customerData);
-    console.log('Order List:', orderList);
+    console.log('Order List:', cartlist);
     await addCustomer(customerData);
-    //addOrder(orderList ,customerData.paymentMethod)
+    //addOrder(cartlist ,customerData.paymentMethod)
 
     
     // Here you would typically send this data to your backend or process it further
@@ -81,7 +81,7 @@ export default function CheckoutPage() {
                         <div className="h-px w-full bg-blue_gray-100" />
                       </div>
                       <div className="flex flex-col w-[83%] gap-16 md:gap-10 ">
-                        {orderList.map((item) => (
+                        {cartlist.map((item) => (
                           <div className="flex flex-col items-center justify-start w-full gap-[31px]">
                             <div className="flex flex-row justify-between items-start w-full">
                               <Heading as="h4" className="!text-black-900">

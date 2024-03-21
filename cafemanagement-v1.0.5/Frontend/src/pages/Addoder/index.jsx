@@ -22,7 +22,7 @@ export default function OrderonlinePage() {
   const { menu, pagination, categorylist } = useSelector((state) => state.menu);
   const { totalPages, currentPage } = pagination;
   const rowsPerPage = 6;
-  const orderList = useSelector((state) => state.order.orderList);
+  const cartlist = useSelector((state) => state.order.cartlist);
   const subtotal = useSelector((state) => state.order.subtotal);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -55,8 +55,8 @@ export default function OrderonlinePage() {
         return newQuantities;
       });
 
-      // Update orderList in Redux store
-      const updatedOrderList = [...orderList];
+      // Update cartlist in Redux store
+      const updatedOrderList = [...cartlist];
       const selectedItem = {
         ...menu[index],
         orderedQuantity: quantities[index] + 1,
@@ -74,8 +74,8 @@ export default function OrderonlinePage() {
         return newQuantities;
       });
 
-      // Create a new array with updated orderList
-      const updatedOrderList = orderList.map((item) => {
+      // Create a new array with updated cartlist
+      const updatedOrderList = cartlist.map((item) => {
         if (item.id === menu[index].id) {
           return {
             ...item,
@@ -85,7 +85,7 @@ export default function OrderonlinePage() {
         return item;
       });
 
-      // Dispatch the updated orderList
+      // Dispatch the updated cartlist
       dispatch(setOrder({ data: updatedOrderList }));
     }
   };
@@ -118,7 +118,7 @@ export default function OrderonlinePage() {
     getMenu(Number(pageNumber), rowsPerPage); // Reset to the first page when changing items per page
   };
 
-  // const subtotal = orderList.reduce(
+  // const subtotal = cartlist.reduce(
   //   (total, item) => total + item.price * item.orderedQuantity,
   //   0
   // );
@@ -267,10 +267,10 @@ export default function OrderonlinePage() {
                                     </div>
                                   </div>
                                   <p className="text-gray-900 text-[16.62px] ">
-                                    {orderList.some(
+                                    {cartlist.some(
                                       (orderItem) => orderItem.id === item.id
                                     )
-                                      ? orderList.find(
+                                      ? cartlist.find(
                                           (orderItem) =>
                                             orderItem.id === item.id
                                         ).orderedQuantity
@@ -377,7 +377,7 @@ export default function OrderonlinePage() {
                         <div className="h-px w-full bg-blue_gray-100" />
                       </div>
                       <div className="flex flex-col w-[83%] gap-16 md:gap-10 ">
-                        {orderList.map((item) => (
+                        {cartlist.map((item) => (
                           <div className="flex flex-col items-center justify-start w-full gap-[31px]">
                             <div className="flex flex-row justify-between items-start w-full">
                               <Heading as="h4" className="!text-black-900">
@@ -440,7 +440,7 @@ export default function OrderonlinePage() {
                         shape="round"
                         className="mb-1 sm:px-5 font-semibold min-w-[283px] !rounded-[15px] sm:min-w-full"
                         onClick={() => {
-                          if (orderList.length > 0) {
+                          if (cartlist.length > 0) {
                             navigate("/checkout"); // Adjust the path as needed
                           } else {
                             alert("Your cart is empty!"); // Or handle this case as you see fit

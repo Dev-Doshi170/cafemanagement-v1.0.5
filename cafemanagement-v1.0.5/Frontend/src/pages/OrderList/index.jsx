@@ -1,7 +1,9 @@
-import React from "react";
+import React ,{ useEffect,useState } from "react";
 import { Helmet } from "react-helmet";
 import { Button, Img, Text, SelectBox } from "../../components";
 import Header from "../../components/Header";
+import { useOrderContext } from "../../context/order";
+import { useSelector } from 'react-redux';
 
 const dropDownOptions = [
   { label: "Option1", value: "option1" },
@@ -9,99 +11,26 @@ const dropDownOptions = [
   { label: "Option3", value: "option3" },
 ];
 
-const tableData = [
-  // Your table data here...
-  {
-            orderidone: "#01236556",
-            date: "21 June 2020, 12:42 AM",
-            customerone: "Kathryn Murphy",
-            location: "35 Station Road London",
-            amount: "$83.46",
-            satusorder: "\tNew Order",
-          },
-          {
-            orderidone: "#01236556",
-            date: "21 June 2020, 12:42 AM",
-            customerone: "Kathryn Murphy",
-            location: "35 Station Road London",
-            amount: "$83.46",
-            satusorder: "\tNew Order",
-          },
-          {
-            orderidone: "#01236556",
-            date: "24 June 2020, 12:42 AM",
-            customerone: "Kristin Watson",
-            location: "35 Station Road London",
-            amount: "$82.46\t",
-            satusorder: "On Delivery",
-          },
-          {
-            orderidone: "#01236556",
-            date: "21 June 2020, 12:42 AM",
-            customerone: "Darrell Steward",
-            location: "35 Station Road London",
-            amount: "$87.46",
-            satusorder: "\tNew Order",
-          },
-          {
-            orderidone: "#01236556",
-            date: "24 June 2020, 12:42 AM",
-            customerone: "Jenny Wilson",
-            location: "35 Station Road London",
-            amount: "$82.46",
-            satusorder: "On Delivery",
-          },
-          {
-            orderidone: "#01236556",
-            date: "24 June 2020, 12:42 AM",
-            customerone: "Courtney Henry",
-            location: "35 Station Road London",
-            amount: "$90.46",
-            satusorder: "On Delivery",
-          },
-          {
-            orderidone: "#01236556",
-            date: "21 June 2020, 12:42 AM",
-            customerone: "Annette Black",
-            location: "35 Station Road London",
-            amount: "$12.46",
-            satusorder: "\tNew Order",
-          },
-          {
-            orderidone: "#01236556",
-            date: "21 June 2020, 12:42 AM",
-            customerone: "Eleanor Pena",
-            location: "35 Station Road London",
-            amount: "$92.46",
-            satusorder: "On Delivery",
-          },
-          {
-            orderidone: "#01236556",
-            date: "23 June 2020, 12:42 AM",
-            customerone: "Wade Warren",
-            location: "35 Station Road London",
-            amount: "$32.46",
-            satusorder: "\tNew Order",
-          },
-          {
-            orderidone: "#01236556",
-            date: "218 June 2020, 12:42 AM",
-            customerone: "Brooklyn Simmons",
-            location: "35 Station Road London",
-            amount: "$82.46",
-            satusorder: "\tNew Order",
-          },
-          {
-            orderidone: "#01236556",
-            date: "218 June 2020, 12:42 AM",
-            customerone: "Brooklyn Simmons",
-            location: "35 Station Road London",
-            amount: "$82.46",
-            satusorder: "\tNew Order",
-          },
-];
+
 
 const OrderListPage = () => {
+  const { getOrderList,updateOrderStatus } = useOrderContext();
+  const {orderlist} = useSelector((state) => state.order);
+
+
+  useEffect(() => {
+    
+    getOrderList();
+  }, [])
+
+  const handleCheckboxClick = (orderId) => {
+    console.log('Checkbox clicked for order ID:', orderId);
+    updateOrderStatus(orderId);
+    // Call your function to update the status here, passing orderId
+  };
+
+  console.log(orderlist)
+
   return (
     <div className="flex flex-row justify-center w-full bg-white-A700">
       <div className="flex flex-col items-center justify-start w-[83%]">
@@ -116,23 +45,18 @@ const OrderListPage = () => {
                 Dashboard / Order List
               </Text>
             </div>
-            <div className="flex flex-row justify-start w-[22%] gap-[22px]">
-              <SelectBox
-                indicator={<Img src="images/img_frame_11_white_a700.svg" alt="Frame 11" />}
-                name="allstatus"
-                placeholder="All Status"
-                options={dropDownOptions}
-                className="w-[49%] gap-px border-blue-A200 border border-solid"
-              />
-              <SelectBox
-                color="blue_50"
-                variant="outline"
-                indicator={<Img src="images/img_frame_11.svg" alt="Frame 11" />}
-                name="today"
-                placeholder="Today"
-                options={dropDownOptions}
-                className="w-[42%] gap-px"
-              />
+            <div className="flex flex-row justify-start w-[25%] gap-[22px]">
+              <div className="flex gap-4 w-full ">
+            <label htmlFor="">Show data of last 1 hour only</label>
+            <input
+            type="checkbox"
+            //checked={rowData.status}
+            //onChange={() => handleCheckboxClick(rowData.orderid)}
+            className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+            
+            />
+            </div>
+             
             </div>
           </div>
           <div className="flex flex-col items-center justify-center w-full gap-[26px]">
@@ -144,26 +68,57 @@ const OrderListPage = () => {
                     <th className="text-gray-700_01 font-roboto w-52">Date</th>
                     <th className="text-gray-700_01 font-roboto ">Customer</th>
                     <th className="text-gray-700_01 font-roboto ">Amount</th>
-                    <th className="text-gray-700_01 font-roboto ">Status Order</th>
+                    <th className="text-gray-700_01 font-roboto ">Product Name</th>
+                    <th className="text-gray-700_01 font-roboto ">Quantity</th>
+                    <th className="text-gray-700_01 font-roboto ">Total Amount</th>
+                    <th className="text-gray-700_01 font-roboto ">Status</th>
                   </tr>
                 </thead>
+                
                 <tbody>
-                  {tableData.map((rowData, index) => (
-                    <tr key={index}>
-                      <td className="text-center text-gray-700_01 font-roboto ">{rowData.orderidone}</td>
-                      <td className="text-center w-14 text-gray-700_01 font-roboto h-14">{rowData.date}</td>
-                      <td className="text-center text-gray-700_01 font-roboto">{rowData.customerone}</td>
-                      <td className="text-center text-gray-700_01 font-roboto">{rowData.amount}</td>
-                      <td>
-                        <div className="flex flex-row justify-around ">
-                          <Button color="blue_50" className="mt-[11px] font-medium min-w-[100px] font-roboto">
-                            {rowData.satusorder}
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
+ 
+  {orderlist && orderlist.length > 0 ? (
+    
+    orderlist.map((rowData, index) => (
+      <tr key={index} className={rowData.status ? "opacity-50" : ""}>
+        <td className="text-center text-gray-700_01 font-roboto">{rowData.orderid}</td>
+        <td className="text-center w-14 text-gray-700_01 font-roboto h-14">
+          {new Date(rowData.Date).toLocaleString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true,
+          })}
+        </td>
+        <td className="text-center text-gray-700_01 font-roboto">{rowData.customername}</td>
+        <td className="text-center text-gray-700_01 font-roboto">{(rowData.amount * 1.18).toFixed()}</td>
+        <td className="text-center text-gray-700_01 font-roboto">{rowData.productname}</td>
+        <td className="text-center text-gray-700_01 font-roboto">{rowData.quantity}</td>
+        <td className="text-center text-gray-700_01 font-roboto">{Math.round(rowData.amount * rowData.quantity * 1.18)}</td>
+        <td className="text-center text-gray-700_01 font-roboto">
+          {/* Assuming rowData.status is a boolean value */}
+          <input
+            type="checkbox"
+            checked={rowData.status}
+            onChange={() => handleCheckboxClick(rowData.orderid)}
+            className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+            
+          />
+        </td>
+      </tr>
+    ))
+  ) : (
+    // If orderlist is null or empty, render a single row indicating no orders found
+    <tr>
+      <td colSpan="5" className="text-center text-gray-700_01 font-roboto">
+        No orders found.
+      </td>
+    </tr>
+  )}
+</tbody>
               </table>
             </div>
             <div className="flex flex-row justify-between items-center w-full">

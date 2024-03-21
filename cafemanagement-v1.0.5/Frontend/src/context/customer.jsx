@@ -7,7 +7,7 @@ import {useOrderContext} from  "../context/order"
 const CustomerContext = createContext();
 
 export const CustomerProvider = ({ children }) => {
-    const orderList = useSelector((state) => state.order.orderList);
+    const cartlist = useSelector((state) => state.order.cartlist);
     const customerid = useSelector((state) => state.order.customerid);
     const dispatch = useDispatch();
     const {addOrder} = useOrderContext();
@@ -35,7 +35,7 @@ export const CustomerProvider = ({ children }) => {
 //             console.log('Customer ID:', data.customerid);
 //             dispatch(setCustomerId(data.customerid));
 //             if(customerid === data.customerid){
-//                 addOrder(orderList ,customerData.paymentMethod)
+//                 addOrder(cartlist ,customerData.paymentMethod)
 //             }
             
 //         }
@@ -65,7 +65,7 @@ const addCustomer = async (customerData) => {
             console.log('Customer ID:', data.customerid);
             dispatch(setCustomerId(data.customerid));
             console.log("cstid",data.customerid)
-            addOrder(orderList,customerData.paymentMethod, data.customerid);      
+            addOrder(cartlist,customerData.paymentMethod, data.customerid);      
         }
 
         return { success: true, data };

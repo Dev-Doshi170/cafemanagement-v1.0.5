@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { Pencil } from "lucide-react";
 import { Trash2 } from "lucide-react";
 import Popup from "../../components/Popup/index";
+import { useOrderContext } from "../../context/order";
 
 
 
@@ -23,6 +24,7 @@ export default function MenuListPage() {
 
   const {menu,categorylist,pagination} = useSelector((state) => state.menu);
   const {totalPages,currentPage,rowsPerPage} =pagination
+  const { getOrderList } = useOrderContext();
 
  
   const { getMenu,getCatgory,updateMenuDetails,deleteMenuItem,searchMenu } = useMenuContext();
@@ -30,7 +32,7 @@ export default function MenuListPage() {
   useEffect(() => {
     getMenu();
     getCatgory();
-    
+    getOrderList();
   }, [])
 
   console.log(menu.name)
